@@ -1,0 +1,4 @@
+{{ "Hello #{ World } " }}
+{% verbatim endverbati %} bA {%endverbatim B {% endverbati %}   
+  ABA
+{% blockx 5 4 "Hello " %}

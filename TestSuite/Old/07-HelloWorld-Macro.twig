@@ -1,0 +1,8 @@
+{% macro hello(c, d, e=1) %}
+Hello {{ e }}, {{ c }} {{ d }}
+{% endmacro %}
+{{ _self.hello(a, b) }}
+--- data.json
+{ "a": "World!", "b": "(comment)" }
+--- expected
+Hello 1, World! (comment)

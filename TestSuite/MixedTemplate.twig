@@ -1,0 +1,16 @@
+{% if true %}True is true{%else%}True is false{% endif %}
+{% if false %}False is true{%else%}False is false{% endif %}
+{% if false %}False is true{%elseif false %}False may still be true{%else%}False is definitely false{% endif %}
+--- expected
+True is true
+False is false
+False is definitely false
+{% extends "foo.twig" %}
+{% block pippo %}Pippo{% endblock %}
+{% block pluto Pluto %}
+{% macro hello(a,b,c) %}Hello{%endmacro%}
+{% macro hello(a,b,c=4) %}Hello{%endmacro%}
+{% macro hello(a,b=4,c) %}Hello{%endmacro%}
+{% from "pippo" import a, b as c %}
+{% from "pippo" import a, b, d %}
+{% import "pluto" as paperino %}

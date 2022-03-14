@@ -1,0 +1,4 @@
+Hello, {{ 4 }}!
+
+--- expected
+Hello, 4!

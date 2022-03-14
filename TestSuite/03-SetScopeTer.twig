@@ -1,0 +1,24 @@
+{% set y=3 %}
+{% with %}
+  {% set y=4 %}
+  In with A: {{y|raw}}
+  {% for x in 0..0 %}
+    In for A: {{y|raw}}
+    {% set y=5 %}
+    In for B: {{y|raw}}
+  {% endfor %}    
+  In with B: {{y|raw}}
+{% endwith %}
+Main: {{y|raw}}
+--- expected
+    In with A: 4
+
+      In for A: 4
+
+        In for B: 5
+
+      
+
+  In with B: 5
+
+Main: 3

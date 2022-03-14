@@ -1,0 +1,15 @@
+{% macro hello(c, d, e=1) %}
+Hello {{ e }}, {{ c }} {{ d }}
+{% endmacro %}
+{% include "file1.twig" %}
+{{ _self.hello(a, b) }}
+--- file1.twig
+{% set a = "Foo" %}
+{% set b = "bar" %}
+{% import "main.twig" as main %}
+{{ main.hello(a,b) }}
+--- data.json
+{ "a": "World!", "b": "(comment)" }
+--- expected
+Hello 1, Foo bar
+Hello 1, World! (comment)

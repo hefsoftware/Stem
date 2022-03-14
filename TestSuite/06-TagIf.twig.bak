@@ -1,0 +1,5 @@
+{% if true %}True is true{%else%}True is false{% endif %}
+{% if false %}False is true{%else%}False is false{% endif %}
+--- expected
+True is true
+False is false

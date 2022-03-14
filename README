@@ -1,0 +1,3 @@
+Stem is a Qt porting of Twig template engine (See https://twig.symfony.com/).
+Much of the lexing/parsing code was translated almost verbatim from Twig.
+

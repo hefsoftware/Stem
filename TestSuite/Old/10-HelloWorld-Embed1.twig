@@ -1,0 +1,9 @@
+{% embed "file.twig" with {'a': '?', 'b': '??' } %}
+
+{% endembed %}
+--- file1.twig
+Hello, {% block Hello %} world {{ a }} {% endblock %} {% block Comment2 %} world {{ b }} {% endblock %}
+--- data.json
+{ "a": "!", "b": "!!" }
+--- expected
+Hello,  world ?   world ?? 

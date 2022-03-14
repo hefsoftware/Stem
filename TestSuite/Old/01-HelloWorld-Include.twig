@@ -1,0 +1,7 @@
+{% include "file1.twig" %}
+--- file1.twig
+Hello 2, {{ a }}
+--- data.json
+{ "a": "World!" }
+--- expected
+Hello 2, World!

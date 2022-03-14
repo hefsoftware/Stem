@@ -1,0 +1,89 @@
+#include "lexerinstance.h"
+#include "../Engine/message.h"
+#include <QDebug>
+#define tr QString::fromLatin1
+using namespace QTwig;
+
+
+
+LexerInstance::LexerInstance(Lexer *lexer, const QString &body, const QString &filename, Message *output): m_lexer(lexer), m_body(body), m_filename(filename), m_output(output)
+{
+  m_cursor=0;
+  m_lastNewLineCursor=0;
+  m_lineNo=1;
+  m_end=body.length();
+  m_tokens.clear();
+  m_state=STATE_DATA;
+  m_states.clear();
+  m_brackets.clear();
+}
+
+void LexerInstance::tokenize()
+{
+  for(m_cursor=0;m_cursor<m_end;)
+  {
+    //qDebug()<<"Parsing at"<<m_cursor<<m_source.mid(m_cursor,10)<<m_end<<m_lineNo<<(m_cursor-m_lastNewLineCursor);
+    switch(m_state)
+    {
+      case STATE_DATA:
+        lexData(); break;
+//      case STATE_VAR:
+//        lexVar(); break;
+//      case STATE_STRING:
+//        lexString(); break;
+//      case STATE_INTERPOLATION:
+//        lexInterpolation(); break;
+//      case STATE_BLOCK:
+//        lexBlock(); break;
+      default:
+        failedLexing(tr("Unhandled state %1").arg(m_state));
+    }
+  }
+  //TODO: missing non-empty brackets handling
+  if(m_brackets.size())
+    outputError(tr("Unclosed bracket"), m_bracketsPos.last());
+  pushToken(Token::EOF_TYPE);
+  return TokenStream(m_tokens);
+}
+
+void LexerInstance::pushToken(Token::TokenType type, QString value)
+{
+  m_tokens.append(Token(type,currentLocation(),value));
+
+  qDebug()<<m_tokens.last();
+//  QString valueToPrint=value;
+//  valueToPrint=valueToPrint.replace("\n","\\n");
+//  if(valueToPrint.size()>16)
+//    valueToPrint=valueToPrint.left(6)+QString("...")+valueToPrint.right(6);
+  //printf("Token %s: \'%s\' %d:%d\n",qPrintable(Token::typeName(type)),qPrintable(valueToPrint),m_lineNo,m_cursor-m_lastNewLineCursor);
+}
+
+void LexerInstance::failedLexing(const QString &msg)
+{
+  failedLexing(msg, currentPosition());
+}
+
+void LexerInstance::failedLexing(const QString &msg, const PositionTracking &pos)
+{
+  outputError(msg, pos);
+  m_cursor=m_end;
+}
+
+void LexerInstance::outputError(const QString &error, const PositionTracking &pos)
+{
+  m_output->error(error, Location(m_filename, pos.lineNo, pos.cursor-pos.lastNewLineCursor));
+}
+
+LexerInstance::PositionTracking LexerInstance::currentPosition()
+{
+  PositionTracking ret;
+  ret.cursor=m_cursor;
+  ret.lineNo=m_lineNo;
+  ret.lastNewLineCursor=m_lastNewLineCursor;
+  return ret;
+}
+
+Location Lexer::currentLocation()
+{
+  return Location(m_fileName,m_lineNo, m_cursor-m_lastNewLineCursor);
+}

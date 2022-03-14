@@ -1,0 +1,9 @@
+{% set foo = 1 %}
+{% with %}
+{% set foo = 10 %}
+{{ foo }}
+{% endwith %}
+{{ foo }}
+--- expected
+10
+1

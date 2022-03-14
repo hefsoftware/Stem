@@ -1,0 +1,9 @@
+Hello, {3+2}!={{"Hello, #{3+2}"}}
+
+--- expected
+3+4=7
+3.5+4=7.5
+3+4.5=7.5
+3+1*5=8
+"Hello, world!"=Hello, world!
+"Hello, {3+2}!"=Hello, 5
